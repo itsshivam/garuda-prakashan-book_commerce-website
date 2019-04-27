@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>This page is for deleting content from database</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script type="text/javascript" src="../static/js/jquery-3.0.0.min.js"></script>
+</head>
+<body>
+
+    <div>
+        <h3 style="text-align : center;">Deletes files from Author database</h3>
+        <form name="author_form">{% csrf_token %}
+            <input type="text" name = "form_type" value="author" hidden="hidden">
+            <p style="text-align : center; margin-top : 50px;">Enter name of author :
+                <select name="author_name">
+                    <option value=""></option>
+                    {% if name_list %}
+                        {% for name in name_list %}
+                            <option value="{{name}}">{{name}}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+            </p>
+            <p style="text-align : center;">Select type of file :
+                <select name="file_type">
+                    <option value=""></option>
+                    <option value="main_image">Main Image</option>
+                    <option value="image1">Image 1</option>
+                    <option value="image2">Image 2</option>
+                </select>
+            </p>
+            <p style="text-align : center;"><input type="submit" value = "Submit" id="submit_author"></p>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        $('#submit_author').click(function(e){
+            e.preventDefault();
+            var form_type = document.forms["author_form"]["form_type"].value;
+            var author_name = document.forms["author_form"]["author_name"].value;
+            var file_type = document.forms["author_form"]["file_type"].value;
+            if(author_name != "" && file_type != ""){
+                final = confirm("Are you sure you want to delete from author section!!")
+                var csrftoken = getCookie('csrftoken');
+                $.ajax({
+                    url : 'http://127.0.0.1:8000/delete_files/',
+                    type : "POST",
+                    data : {
+                        csrfmiddlewaretoken : csrftoken,
+                        form_type : form_type,
+                        author_name : author_name,
+                        file_type : file_type,
+                    },
+                    success : function(json){
+                        alert(json);
+                        location.reload();
+                    },
+                    error : function(xhr,errmsg,err) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                    }
+                });
+            }
+            else{
+                alert("Please select the section which you want to delete!!")
+            }
+        });
+    </script>
+
+    <hr style="margin-top : 40px; margin-bottom : 40px;">
+
+    <div>
+        <h3 style="text-align : center;">Deletes files from Books database</h3>
+        <form name="book_form">{% csrf_token %}
+            <input type="text" name = "form_type" value="book" hidden="hidden">
+            <p style="text-align : center; margin-top : 50px;">Enter name of Book :
+                <select name="book_name">
+                    <option value=""></option>
+                    {% if book_list %}
+                        {% for name in book_list %}
+                            <option value="{{name}}">{{name}}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+            </p>
+            <p style="text-align : center;">Select type of file :
+                <select name="file_type_book">
+                    <option value=""></option>
+                    <option value="front_image">Front Page Image</option>
+                    <option value="back_image">Back Page Image</option>
+                    <option value="image1">Image 1</option>
+                    <option value="image2">Image 2</option>
+                    <option value="image3">Image 3</option>
+                    <option value="preview">Preview File</option>
+                    <option value="book">Main Book</option>
+                </select>
+            </p>
+            <p style="text-align : center;"><input type="submit" value = "Submit" id="submit_book"></p>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        $('#submit_book').click(function(e){
+            e.preventDefault();
+            var form_type = document.forms["book_form"]["form_type"].value;
+            var book_name = document.forms["book_form"]["book_name"].value;
+            var file_type_book = document.forms["book_form"]["file_type_book"].value;
+
+            if(book_name != "" && file_type_book != ""){
+                final = confirm("Are you sure you want to delete from book section!!")
+                var csrftoken = getCookie('csrftoken');
+                $.ajax({
+                    url : 'http://127.0.0.1:8000/delete_files/',
+                    type : "POST",
+                    data : {
+                        csrfmiddlewaretoken : csrftoken,
+                        form_type : form_type,
+                        book_name : book_name,
+                        file_type_book : file_type_book,
+                    },
+                    success : function(json){
+                        alert(json);
+                        location.reload();
+                    },
+                    error : function(xhr,errmsg,err) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                    }
+                });
+            }
+            else{
+                alert("Please select the section which you want to delete!!")
+            }
+        });
+    </script>
+
+
+</body>
+</html>
